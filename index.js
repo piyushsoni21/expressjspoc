@@ -1,12 +1,17 @@
+
 const express = require("express");
 const path = require("path");
 const app = express();
+const hbs = require("express-handlebars");
 const port = 3000;
 
 // const middleWareTest = (req, res, next) => {
 //   console.log(req);
 //next();
 // };
+
+app.engine('handlebars', hbs.engine({ defaultLayout: 'main', layoutsDir: __dirname + '/views/layouts' }));
+app.set('view engine', 'handlebars');
 
 app.use(express.static(path.join(__dirname, "public")));
 
