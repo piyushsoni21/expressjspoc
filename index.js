@@ -4,7 +4,7 @@ const path = require("path");
 const app = express();
 const hbs = require("express-handlebars");
 const port = 3000;
-
+const axios = require('axios'); // Using axios to make HTTP requests
 // const middleWareTest = (req, res, next) => {
 //   console.log(req);
 //next();
@@ -16,6 +16,8 @@ app.set('view engine', 'handlebars');
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use('/b', require(path.join(__dirname, 'routes/blog.js')))
+
+app.use('/fetchData', require(path.join(__dirname, 'routes/fetchData.js')))
 //app.use(middleWareTest)
 
 // app.get("/hello/:name", (req, res) => {
@@ -32,3 +34,15 @@ app.use('/b', require(path.join(__dirname, 'routes/blog.js')))
 app.listen(port, () => {
   console.log(`My app listening on port ${port}`);
 });
+
+
+app.get('/getS3Data', async function (req, res) {  
+  try {
+    const response = await axios.get('https://s3.amazonaws.com/roxiler.com/product_transaction.json'); // Replace with your third-party API URL
+    const data = response.data;
+    res.json(data); // Send the received data as the response
+} catch (error) {
+    console.error('Error fetching data from third-party API:', error);
+    res.status(500).send('An error occurred');
+}
+});  
